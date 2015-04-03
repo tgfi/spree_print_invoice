@@ -11,7 +11,7 @@ else
 end
 
 @order.line_items.each do |item|
-  row = [ item.variant.product.sku, item.variant.product.name]
+  row = [ item.variant.sku, item.variant.product.name]
   row << item.variant.options_text
   row << item.single_display_amount.to_s unless @hide_prices
   row << item.quantity
