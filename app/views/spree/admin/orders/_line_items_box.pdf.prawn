@@ -1,3 +1,23 @@
+move_down 235
+
+if po_info = @order.payments.where(source_type: "Spree::PurchaseOrderDocument").first.try(:source)
+
+  data = [
+    ['Number', 'Contact Name', 'Contact Email'],
+    [po_info.number, po_info.contact_name, po_info.contact_email]
+  ]
+
+  text 'Purchase Order Detail', :align => :left, :style => :bold, :size => 11
+
+  table(data, :width => 540) do
+    cells.border_width = 0.5
+    row(0).font_style = :bold
+  end
+
+  move_down(25)
+end
+
+
 data = []
 
 if @hide_prices
@@ -39,7 +59,8 @@ unless @hide_prices
   data << [nil, nil, nil, nil, Spree.t(:total), @order.display_total.to_s]
 end
 
-move_down(250)
+text 'Line Items', :align => :left, :style => :bold, :size => 11
+
 table(data, :width => @column_widths.values.compact.sum, :column_widths => @column_widths) do
   cells.border_width = 0.5
 
