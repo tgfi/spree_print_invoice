@@ -21,20 +21,19 @@ end
 data = []
 
 if @hide_prices
-  @column_widths = { 0 => 100, 1 => 165, 2 => 75, 3 => 75 }
-  @align = { 0 => :left, 1 => :left, 2 => :right, 3 => :right }
-  data << [Spree.t(:sku), Spree.t(:item_description), Spree.t(:options), Spree.t(:qty)]
+  @column_widths = { 0 => 100, 1 => 75, 1 => 165, 3 => 75 }
+  @align = { 0 => :left, 1 => :right, 2 => :left, 3 => :left }
+  data << [Spree.t(:sku), Spree.t(:qty), Spree.t(:item_description), Spree.t(:options)]
 else
-  @column_widths = { 0 => 75, 1 => 205, 2 => 75, 3 => 50, 4 => 75, 5 => 60 }
-  @align = { 0 => :left, 1 => :left, 2 => :left, 3 => :right, 4 => :right, 5 => :right}
-  data << [Spree.t(:sku), Spree.t(:item_description), Spree.t(:options), Spree.t(:price), Spree.t(:qty), Spree.t(:total)]
+  @column_widths = { 0 => 75, 1 => 40, 2 => 215, 3 => 75, 4 => 75, 5 => 60 }
+  @align = { 0 => :left, 1 => :right, 2 => :left, 3 => :left, 4 => :right, 5 => :right}
+  data << [Spree.t(:sku), Spree.t(:qty), Spree.t(:item_description), Spree.t(:options), Spree.t(:price), Spree.t(:total)]
 end
 
 @order.line_items.each do |item|
-  row = [ item.variant.sku, item.variant.product.name]
+  row = [ item.variant.sku, item.quantity, item.variant.product.name]
   row << item.variant.options_text
   row << item.single_display_amount.to_s unless @hide_prices
-  row << item.quantity
   row << item.display_total.to_s unless @hide_prices
   data << row
 end
