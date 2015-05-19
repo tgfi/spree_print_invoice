@@ -42,10 +42,15 @@ extra_row_count = 0
 
 unless @hide_prices
   extra_row_count += 1
-  data << [""] * 5
+  data << [] * 6
   data << [nil, nil, nil, nil, Spree.t(:subtotal), @order.display_item_total.to_s]
 
-  @order.all_adjustments.eligible.each do |adjustment|
+  sales_tax = @order.all_adjustments.eligible.select { |a| a.source_type == 'Spree::TaxRate' }.map(&:amount).inject(0, :+)
+  if sales_tax > 0
+    data << [nil, nil, nil, nil, 'Sales Tax', "$#{sales_tax}"]
+  end
+
+  @order.all_adjustments.eligible.select { |a| a.source_type != 'Spree::TaxRate' }.each do |adjustment|
     extra_row_count += 1
     data << [nil, nil, nil, nil, adjustment.label, adjustment.display_amount.to_s]
   end
