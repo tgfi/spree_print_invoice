@@ -1,4 +1,4 @@
-move_down 235
+move_down 225
 
 if po_info = @order.payments.where(source_type: "Spree::PurchaseOrderDocument").first.try(:source)
 
@@ -16,7 +16,6 @@ if po_info = @order.payments.where(source_type: "Spree::PurchaseOrderDocument").
 
   move_down(25)
 end
-
 
 data = []
 
@@ -47,6 +46,7 @@ unless @hide_prices
 
   sales_tax = @order.all_adjustments.eligible.select { |a| a.source_type == 'Spree::TaxRate' }.map(&:amount).inject(0, :+)
   if sales_tax > 0
+    extra_row_count += 1
     data << [nil, nil, nil, nil, 'Sales Tax', "$#{sales_tax}"]
   end
 
@@ -60,7 +60,10 @@ unless @hide_prices
     data << [nil, nil, nil, nil, shipment.shipping_method.name, shipment.display_cost.to_s]
   end
 
+  extra_row_count += 1
   data << [nil, nil, nil, nil, Spree.t(:total), @order.display_total.to_s]
+  extra_row_count += 1
+  data << [nil, nil, nil, nil, nil, ' ']
 end
 
 text 'Line Items', :align => :left, :style => :bold, :size => 11
@@ -78,11 +81,13 @@ table(data, :width => @column_widths.values.compact.sum, :column_widths => @colu
   row(0).column(last_column).border_widths = [0.5, 0.5, 0.5, 0.5]
 
   if extra_row_count > 0
-    extra_rows = row((-2-extra_row_count)..-2)
+    extra_rows = row((-extra_row_count)..-2)
     extra_rows.columns(0..5).borders = []
     extra_rows.column(4).font_style = :bold
 
-    row(-1).columns(0..5).borders = []
-    row(-1).column(4).font_style = :bold
+    row(data.length - 2).columns(0..5).borders = []
+    row(data.length - 2).column(4).font_style = :bold
+    row(data.length - 1).columns(0..5).borders = []
+    row(data.length - 1).column(4).font_style = :bold
   end
 end
