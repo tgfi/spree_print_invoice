@@ -3,8 +3,8 @@ move_down 225
 if po_info = @order.payments.where(source_type: "Spree::PurchaseOrderDocument").first.try(:source)
 
   data = [
-    ['Number', 'Contact Name', 'Contact Email'],
-    [po_info.number, po_info.contact_name, po_info.contact_email]
+    ['Number', 'Contact Name', 'Contact Email', 'Tax ID'],
+    [po_info.number, po_info.contact_name, po_info.contact_email, po_info.tax_id_number]
   ]
 
   text 'Purchase Order Detail', :align => :left, :style => :bold, :size => 11

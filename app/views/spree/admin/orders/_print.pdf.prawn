@@ -31,16 +31,16 @@ else
 
   move_down 2
   font @font_face, :size => 9
-  text "#{I18n.l @order.completed_at.to_date}", :align => :right
+  text "#{I18n.l @order.completed_at.try(:to_date) || @order.updated_at.to_date}", :align => :right
 end
 
-render :partial => "address"
+render :partial => "spree/admin/orders/address"
 
 move_down 30
 
-render :partial => "line_items_box"
+render :partial => "spree/admin/orders/line_items_box"
 
 move_down 8
 
 # Footer
-render :partial => "footer"
+render :partial => "spree/admin/orders/footer"

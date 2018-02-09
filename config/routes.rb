@@ -8,4 +8,5 @@ Spree::Core::Engine.routes.append do
     end
   end
 
+  get '/checkout/invoice/:id', :to => 'checkout#invoice'
 end
